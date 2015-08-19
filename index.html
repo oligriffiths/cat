@@ -1,0 +1,184 @@
+<html>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
+<script>
+    var images = [
+            'http://25.media.tumblr.com/tumblr_lxwqf2ncuC1r8vfyvo1_1280.png',
+            'http://25.media.tumblr.com/tumblr_lxeywfAOmU1qmjao5o1_400.png',
+            'http://25.media.tumblr.com/tumblr_m0pavpGExM1qcysh1o1_500.png',
+            'http://24.media.tumblr.com/tumblr_m4t68knkfR1qhwmnpo1_1280.png',
+            'http://25.media.tumblr.com/tumblr_m35ox0rEIM1r5f0jbo1_500.png',
+            'http://25.media.tumblr.com/tumblr_lzgmfzZqPj1r1midoo1_500.png',
+            'http://25.media.tumblr.com/tumblr_m3wh4nCMZ71qhig20o1_400.png',
+            'http://28.media.tumblr.com/tumblr_lyng3pn1zY1qzuix4o1_500.png',
+            'http://25.media.tumblr.com/tumblr_lyaa9j2Eaw1qa7f1qo1_500.png',
+            'http://24.media.tumblr.com/tumblr_m3i2kerw6o1qejbiro1_1280.png',
+            'http://25.media.tumblr.com/tumblr_m426r0ua4S1qa9rx1o1_500.png',
+            'http://25.media.tumblr.com/tumblr_m1tkp6lJj41qfxixlo1_500.png',
+            'http://25.media.tumblr.com/tumblr_m4ggdaOAg11qa7f1qo1_1280.png',
+            'http://25.media.tumblr.com/tumblr_m7xra4WYK81rcr72wo1_1280.png',
+            'http://25.media.tumblr.com/tumblr_m2ho3ftt6D1rtuomto1_1280.png',
+            'http://25.media.tumblr.com/ZabOTt2mpifamkwoMzwW7eSgo1_250.png',
+            'http://24.media.tumblr.com/tumblr_m9uettgu5s1rt7yd2o2_250.png',
+            'http://26.media.tumblr.com/tumblr_m0zzslkWDF1qb7j67o1_400.png'
+    ];
+
+    var sounds = [
+            'sound1.mp3',
+            'sound2.mp3',
+            'sound3.mp3',
+            'sound4.mp3',
+            'sound5.mp3',
+            'sound6.mp3',
+            'sound7.mp3'
+    ];
+
+    var addCat = function(){
+
+        var image = images[Math.round(Math.random() * images.length)];
+        var x = Math.random() * window.innerWidth;
+        var y = Math.random() * window.innerHeight;
+
+        var img = $('<img />').attr('src', image).css('top',y).css('left', x).addClass('speed'+Math.ceil(Math.random() * 4)).attr('width', '100px');
+
+        $('#container').append(img);
+
+        setTimeout(function(){
+            img.addClass('animate');
+        }, 0)
+    }
+
+    var sound1, sound2, sound3;
+    var meowCat = function(){
+
+        if(sound1[0].paused) return playSound(sound1, Math.round(Math.random() * sounds.length));
+        if(sound2[0].paused) return playSound(sound2, Math.round(Math.random() * sounds.length));
+        if(sound3[0].paused) return playSound(sound3, Math.round(Math.random() * sounds.length));
+    }
+
+    var playSound = function(element, sound)
+    {
+        element.find('source').attr('src', sounds[sound]);
+        element[0].load();
+        element[0].play();
+    }
+
+    var getRandomColor = function() {
+        var letters = '0123456789ABCDEF'.split('');
+        var color = '#';
+        for (var i = 0; i < 6; i++ ) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
+
+    $(function(){
+
+        sound1 = $('#sound1');
+        sound2 = $('#sound2');
+        sound3 = $('#sound3');
+        $('#purr')[0].play();
+
+        $('input').on('keyup', function(){
+
+            if($(this).val().toLowerCase() == 'meow'){
+                $('#purr')[0].pause();
+                $(this).css('display','none');
+                $(window).scrollTop(0);
+
+                setInterval(function(){
+
+                    addCat();
+                    meowCat();
+                    $('body').css('background-color', getRandomColor());
+
+                }, 100);
+                $(this).blur();
+            }
+
+        }).focus()
+
+        $(window).on('click', function(){
+            if($('input').val().toLowerCase() != 'meow') $('input').focus().val('');
+        })
+    })
+</script>
+
+<style type="text/css">
+    body{
+        min-width: 800px;
+    }
+
+    #container img{
+        position: absolute;
+
+        -ms-transform: scale(0); /* IE 9 */
+        -webkit-transform: scale(0); /* Chrome, Safari, Opera */
+        transform: scale(0);
+    }
+
+    #container img.animate{
+        -ms-transform: scale(2); /* IE 9 */
+        -webkit-transform: scale(2); /* Chrome, Safari, Opera */
+        transform: scale(2);
+    }
+
+    #container img.speed1{
+        -webkit-transition: -webkit-transform 3s; /* For Safari 3.1 to 6.0 */
+        transition: webkit-transform 3s;
+    }
+
+    #container img.speed2{
+        -webkit-transition: -webkit-transform 2s; /* For Safari 3.1 to 6.0 */
+        transition: transform 2s;
+    }
+
+    #container img.speed3{
+        -webkit-transition: -webkit-transform 1s; /* For Safari 3.1 to 6.0 */
+        transition: transform 1s;
+    }
+
+    #container img.speed4{
+        -webkit-transition: -webkit-transform 0.5s; /* For Safari 3.1 to 6.0 */
+        transition: transform 0.5s;
+    }
+
+    input{
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background: none;
+        opacity: 0;
+        border: 0;
+    }
+
+</style>
+
+<body>
+
+<div id="container"></div>
+
+<input type="text" autofocus />
+
+<div id="audio">
+    <audio autoplay hidden loop id="purr">
+        <source src="purr.mp3" type="audio/mpeg" />
+    </audio>
+
+    <audio id="sound1" hidden autoplay>
+        <source type="audio/mpeg" />
+    </audio>
+
+    <audio id="sound2" hidden autoplay>
+        <source type="audio/mpeg" />
+    </audio>
+
+    <audio id="sound3" hidden autoplay>
+        <source type="audio/mpeg" />
+    </audio>
+</div>
+</body>
+</html>
